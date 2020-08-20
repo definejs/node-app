@@ -1,0 +1,20 @@
+{
+  "name": "@definejs/node-app",
+  "version": "0.1.4",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "micty",
+  "email": "mictydeng@qq.com",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/definejs/node-app.git"
+  },
+  "dependencies": {
+    "@definejs/app-module": "^0.1.6",
+    "@definejs/emitter": "^0.1.4",
+    "@definejs/patterns": "^0.1.1"
+  }
+}
