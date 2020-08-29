@@ -13,6 +13,12 @@ module.exports = exports = {
     modules: [],
 
     /**
+    * 获取此 app 所用到的模块管理器。 
+    * @function
+    */
+    mm: AppModule.mm,
+
+    /**
     * 初始化执行环境，并启动应用程序。
     * @param {function} factory 工厂函数，即启动函数。
     */
