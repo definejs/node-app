@@ -1,6 +1,24 @@
 const AppModule = require('@definejs/app-module');
 const Loader = require('./App/Loader');
 
+//重写 require();
+//使它既能加载 app 自身管理的模块（优先），也能加载  node 模块。
+function rewriteRequire() { 
+    let mm = AppModule.mm();
+
+    //备份原来的。
+    mm.$require = mm.require.bind(mm);
+
+    //重写。
+    mm.require = (id, ...args) => {
+        return mm.has(id) ?             //
+            mm.$require(id, ...args) :  //
+            require(id);                //
+    };
+}
+
+
+
 module.exports = exports = {
     /**
     * 默认配置。
@@ -36,6 +54,9 @@ module.exports = exports = {
             throw new Error('应用的顶级模块名称不能含有父子模块的分隔符: ' + seperator);
         }
 
+        //重写 require() 方法。
+        rewriteRequire();
+
         Object.assign(AppModule.defaults, defaults);
 
         //提供快捷方式，让外部可以直接调用全局方法 define()。
@@ -46,7 +67,7 @@ module.exports = exports = {
 
         //先定义一个顶级的模块。
         AppModule.define(root, function ($require, $module, $exports) {
-            factory && factory($require, $module, $exports);
+            factory($require, $module, $exports);
         });
 
         //定义完后马上加载即可启动。
