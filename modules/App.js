@@ -74,9 +74,9 @@ module.exports = exports = {
     * 加载业务层公共的模块。
     * @param  {...any} args 
     */
-    require(...args) {
+    require(id) {
         init();
-        return AppModule.require(...args);
+        return AppModule.require(id);
     },
 
     /**
