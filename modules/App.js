@@ -1,9 +1,45 @@
 const AppModule = require('@definejs/app-module');
 const Loader = require('./App/Loader');
 
+let ready = false;
+
+function init() {
+    if (ready) {
+        return;
+    }
+
+
+    const { defaults, } = exports;
+    const { root, seperator, define, } = defaults;
+
+    //app 顶级模块的名称，一般为空字符串。
+    if (typeof root != 'string') {
+        throw new Error('应用的顶级模块名称必须为一个 string。');
+    }
+
+    //父子模块的分隔符，一般为 `/`。
+    if (root.includes(seperator)) {
+        throw new Error('应用的顶级模块名称不能含有父子模块的分隔符: ' + seperator);
+    }
+
+    //重写 require() 方法。
+    rewriteRequire();
+
+    Object.assign(AppModule.defaults, defaults);
+
+    //提供快捷方式，让外部可以直接调用全局方法 define()。
+    global[define] = AppModule.define;
+
+    //加载业务层指定的模块文件。
+    Loader.load(exports.modules);
+
+    ready = true;
+}
+
+
 //重写 require();
 //使它既能加载 app 自身管理的模块（优先），也能加载  node 模块。
-function rewriteRequire() { 
+function rewriteRequire() {
     let mm = AppModule.mm();
 
     //备份原来的。
@@ -16,8 +52,6 @@ function rewriteRequire() {
             require(id);                //
     };
 }
-
-
 
 module.exports = exports = {
     /**
@@ -37,33 +71,21 @@ module.exports = exports = {
     mm: AppModule.mm,
 
     /**
+    * 加载业务层公共的模块。
+    * @param  {...any} args 
+    */
+    require(...args) {
+        init();
+        return AppModule.require(...args);
+    },
+
+    /**
     * 初始化执行环境，并启动应用程序。
     * @param {function} factory 工厂函数，即启动函数。
     */
     launch(factory) {
-        const { defaults, } = exports;
-        const { root, seperator, define, } = defaults;
-
-        //app 顶级模块的名称，一般为空字符串。
-        if (typeof root != 'string') {
-            throw new Error('应用的顶级模块名称必须为一个 string。');
-        }
-
-        //父子模块的分隔符，一般为 `/`。
-        if (root.includes(seperator)) {
-            throw new Error('应用的顶级模块名称不能含有父子模块的分隔符: ' + seperator);
-        }
-
-        //重写 require() 方法。
-        rewriteRequire();
-
-        Object.assign(AppModule.defaults, defaults);
-
-        //提供快捷方式，让外部可以直接调用全局方法 define()。
-        global[define] = AppModule.define;
-
-        //加载业务层指定的模块文件。
-        Loader.load(exports.modules);
+        
+        init();
 
         //先定义一个顶级的模块。
         AppModule.define(root, function ($require, $module, $exports) {
