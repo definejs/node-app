@@ -6,8 +6,8 @@ module.exports = {
     * 加载指定模式的所有模块文件。
     * @param {Array} patterns 要加载的模块文件的模式列表。
     */
-    load(patterns) {
-        let files = Patterns.getFiles(patterns);
+    load(dir, patterns) {
+        let files = Patterns.getFiles(dir, patterns);
 
         files.map((file) => {
             file = path.resolve(file);

@@ -9,7 +9,7 @@ function init() {
     }
 
 
-    const { defaults, } = exports;
+    const { defaults, cwd, modules, } = exports;
     const { root, seperator, define, } = defaults;
 
     //app 顶级模块的名称，一般为空字符串。
@@ -31,7 +31,7 @@ function init() {
     global[define] = AppModule.define;
 
     //加载业务层指定的模块文件。
-    Loader.load(exports.modules);
+    Loader.load(cwd, modules);
 
     ready = true;
 }
@@ -60,6 +60,13 @@ module.exports = exports = {
     defaults: require('./App.defaults'),
 
     /**
+     * 当前的工作目录。
+     * 即要加载的模块列表所相对的目录。
+     * 一般在业务层设置为 `app.cwd = __dirname;` 即可。
+     */
+    cwd: '',
+
+    /**
     * 要加载的模块文件的模式列表。
     */
     modules: [],
@@ -84,7 +91,7 @@ module.exports = exports = {
     * @param {function} factory 工厂函数，即启动函数。
     */
     launch(factory) {
-        
+
         init();
 
         //先定义一个顶级的模块。
