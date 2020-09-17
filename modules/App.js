@@ -91,8 +91,9 @@ module.exports = exports = {
     * @param {function} factory 工厂函数，即启动函数。
     */
     launch(factory) {
-
         init();
+
+        let root = exports.defaults.root;
 
         //先定义一个顶级的模块。
         AppModule.define(root, function ($require, $module, $exports) {
