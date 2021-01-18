@@ -1,6 +1,6 @@
 {
   "name": "@definejs/node-app",
-  "version": "0.1.10",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {},
@@ -13,8 +13,8 @@
     "url": "https://github.com/definejs/node-app.git"
   },
   "dependencies": {
-    "@definejs/app-module": "^0.1.6",
-    "@definejs/emitter": "^0.1.4",
-    "@definejs/patterns": "^0.1.1"
+    "@definejs/app-module": "^1.0.0",
+    "@definejs/emitter": "^1.0.0",
+    "@definejs/patterns": "^1.0.0"
   }
 }
